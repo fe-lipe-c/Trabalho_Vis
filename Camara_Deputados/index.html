@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Visualização Câmara</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 73px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <h1>Visualização de Discursos da Câmara dos Deputados</h1>
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <!-- <a href="#" class="w3-bar-item w3-button w3-theme-l1"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white"></a>
+    -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="index.html">Sobre</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="zero.html">Padrão</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="center.html">Centralizado</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="normalized.html">Normalizado</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal"></h1>
+      <br>
+      <p style="text-align: justify;">Este projeto tem como objetivo visualizar uma amostra dos discursos na
+    Câmara dos Deputados, classificados por temas, entre o final de 2011 e o início de
+    2019. Mais especificamente, são aproximadamente 18.000 discursos divididos em 27 temas.<br><br>
+  Os discursos foram obtidos através de um scraping no site da Câmara dos Deputados e, depois de
+  passarem por um processo de tratamento de dados, foram classificados de forma não supervisionada
+  pela técnica de Alocação Latente de Dirichlet (LDA em inglês). Esta é uma técnica popular
+  em machine learning para a obtenção de tópicos presentes em textos sem a necessidade
+  de classificação manual por uma pessoa. A ressalva que precisa ser feita é que é um algoritmo que
+  apresenta inconsistências, classificando alguns discursos nos temas errados. Entretanto,
+  o LDA consegue ter uma boa aderência aos temas "verdadeiros", obtendo resultados interessantes.<br><br>
+
+  Como o LDA classifica os textos em temas, mas não diz explicitamente qual o tema
+          (por exemplo, o algoritmo indica que o 10<sup>o</sup> discurso é do tema 2, sendo que existem 27 temas,
+    mas não diz se o tema é Educação ou Segurança), foi feita uma caracterização de cada
+  tema de forma discricionária. Ou seja, após a classificação, foi lida uma amostra
+    dos discursos de cada tema para identificá-lo. Portanto, como a interpretação pode mudar
+    de pessoa para pessoa, existe uma margem de erro na escolha do tema para um conjunto de
+  discursos.<br><br>
+        A metrica utilizada para quantificar cada discurso foi a quantidade de palavras presentes em cada um. Quanto mais longo
+        o discurso, mais palavras terá e maior será a representatividade do tema do qual faz parte em relação aos outros temas.
+        A visualização é feita
+        através de um gráfico de área. Para isso foram geradas três variações deste tipo de gráfico. A versão Padrão empilha
+        a quantidade de palavras utilizadas em cada tema, facilitando a comparação entre temas e entre partidos. A versão
+        Centralizada centraliza o empilhamento, sendo menos funcional, pois dificulta a comparação, e tendo um caráter mais estético.
+        A versão Normalizada mostra a proporção que cada tema tem em relação ao todo.
+
+
+      </p>
+    </div>
+
+  </div>
+
+
+
+
+
+  <!-- Pagination -->
+
+
+
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

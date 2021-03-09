@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Visualização Câmara</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style>
+    .error {
+        color: #ff0000;
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.8.1"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 73px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <h1>Visualização de Discursos da Câmara dos Deputados</h1>
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <!-- <a href="#" class="w3-bar-item w3-button w3-theme-l1"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white"></a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white"></a>
+    -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="index.html">Sobre</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="zero.html">Padrão</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="center.html">Centralizado</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="normalized.html">Normalizado</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Discursos - v.Padrão</h1>
+
+      <ul class="simple">
+  <li style="font-size:11px">SELEÇÃO DOS TEMAS: Clicar no tema escolhido. Segurar SHIFT para escolher mais de um tema.</li>
+  <li style="font-size:11px">SELEÇÃO DO PERÍODO: Clicar e segurar o botão no 2o gráfico de fluxo/área.
+    Após isso, é possível movimentar a janela escolhida clicando e segurando o botão do mouse. </li>
+  <li style="font-size:11px">SELEÇÃO DOS PARTIDOS: Clicar no partido escolhido. Apenas um pode ser escolhido.</li>
+  <li style="font-size:11px">Os números em cada retângulo representam a quantidade de discursos naquele tema/partido.</li>
+  </ul>
+<hr/>
+
+      <div id="vis"></div>
+      <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 400, "continuousHeight": 300, "strokeWidth": 0}}, "vconcat": [{"layer": [{"mark": "rect", "encoding": {"color": {"condition": {"value": "red", "selection": "selector042"}, "value": "grey"}, "x": {"type": "ordinal", "axis": {"orient": "top", "title": "Tema dos Discursos"}, "field": "Dominant_Topic", "scale": {"paddingInner": 0}}, "y": {"type": "ordinal", "axis": null, "field": "Bar", "scale": {"paddingInner": 0}}}, "height": 25, "selection": {"selector042": {"type": "multi", "encodings": ["x"]}}, "transform": [{"filter": {"selection": "selector044"}}, {"aggregate": [{"op": "count", "as": "num_par"}], "groupby": ["Dominant_Topic", "Bar"]}], "width": 820}, {"mark": {"type": "text", "baseline": "middle", "size": 10}, "encoding": {"color": {"condition": {"value": "black", "test": "(datum.num_par > 10000)"}, "value": "white"}, "text": {"type": "quantitative", "field": "num_par"}, "x": {"type": "ordinal", "axis": {"orient": "top", "title": "Tema dos Discursos"}, "field": "Dominant_Topic", "scale": {"paddingInner": 0}}, "y": {"type": "ordinal", "axis": null, "field": "Bar", "scale": {"paddingInner": 0}}}, "transform": [{"filter": {"selection": "selector044"}}, {"aggregate": [{"op": "count", "as": "num_par"}], "groupby": ["Dominant_Topic", "Bar"]}]}], "data": {"url": "data/topicos.json"}}, {"layer": [{"mark": {"type": "rule", "color": "black", "strokeWidth": 1}, "encoding": {"x": {"type": "temporal", "field": "start"}}}, {"mark": {"type": "text", "align": "left", "baseline": "top", "dy": -195, "size": 9}, "encoding": {"color": {"value": "#000000"}, "text": {"type": "nominal", "field": "evento"}, "x": {"type": "temporal", "field": "start", "scale": {"domain": {"selection": "selector044"}}}}}, {"data": {"url": "data/topicos.json"}, "mark": {"type": "area", "interpolate": "monotone"}, "encoding": {"color": {"type": "nominal", "field": "Dominant_Topic", "legend": null, "scale": {"scheme": "dark2"}}, "opacity": {"condition": {"value": 1, "selection": "selector043"}, "value": 0.2}, "tooltip": [{"type": "nominal", "field": "Dominant_Topic"}], "x": {"type": "temporal", "axis": {"title": null}, "field": "Data", "scale": {"domain": {"selection": "selector044"}}, "timeUnit": "yearmonth"}, "y": {"type": "quantitative", "aggregate": "sum", "axis": {"title": "Quantidade de Palavras"}, "field": "Word_Count", "stack": "zero"}}, "height": 400, "selection": {"selector043": {"type": "multi", "fields": ["Dominant_Topic"], "bind": "legend"}}, "transform": [{"filter": {"selection": "selector042"}}], "width": 820}], "data": {"url": "altair-data-a77df692dddb934c30bc41bdea263320.json", "format": {"type": "json"}}}, {"layer": [{"data": {"url": "altair-data-a77df692dddb934c30bc41bdea263320.json", "format": {"type": "json"}}, "mark": {"type": "rule", "color": "black", "strokeWidth": 1}, "encoding": {"x": {"type": "temporal", "field": "start"}}}, {"data": {"url": "data/topicos.json"}, "mark": {"type": "area", "interpolate": "monotone"}, "encoding": {"color": {"type": "nominal", "field": "Dominant_Topic", "legend": null, "scale": {"scheme": "dark2"}}, "opacity": {"condition": {"value": 1, "selection": "selector043"}, "value": 0.2}, "x": {"type": "temporal", "axis": {"domain": false, "format": "%b %Y", "tickSize": 0, "title": null}, "field": "Data", "timeUnit": "yearmonth"}, "y": {"type": "quantitative", "aggregate": "sum", "axis": {"title": null}, "field": "Word_Count", "stack": "zero"}}, "height": 60, "selection": {"selector043": {"type": "multi", "fields": ["Dominant_Topic"], "bind": "legend"}, "selector044": {"type": "interval", "encodings": ["x"]}}, "transform": [{"filter": {"selection": "selector042"}}], "width": 820}]}, {"hconcat": [{"layer": [{"mark": "rect", "encoding": {"color": {"condition": {"value": "#393b79", "selection": "selector045"}, "value": "grey"}, "x": {"type": "ordinal", "field": "Partido", "scale": {"paddingInner": 0}}, "y": {"type": "ordinal", "axis": null, "field": "Bar", "scale": {"paddingInner": 0}}}, "height": 25, "selection": {"selector045": {"type": "single", "encodings": ["x"]}}, "transform": [{"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector044"}}, {"aggregate": [{"op": "count", "as": "num_par"}], "groupby": ["Partido", "Bar"]}], "width": 400}, {"mark": {"type": "text", "baseline": "middle", "size": 8}, "encoding": {"color": {"condition": {"value": "black", "test": "(datum.num_par > 10000)"}, "value": "white"}, "text": {"type": "quantitative", "field": "num_par"}, "x": {"type": "ordinal", "field": "Partido", "scale": {"paddingInner": 0}}, "y": {"type": "ordinal", "axis": null, "field": "Bar", "scale": {"paddingInner": 0}}}, "transform": [{"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector044"}}, {"aggregate": [{"op": "count", "as": "num_par"}], "groupby": ["Partido", "Bar"]}]}], "data": {"url": "data/topicos.json"}}, {"layer": [{"mark": "rect", "encoding": {"color": {"condition": {"value": "#393b79", "selection": "selector046"}, "value": "grey"}, "x": {"type": "ordinal", "field": "Partido", "scale": {"paddingInner": 0}}, "y": {"type": "ordinal", "axis": null, "field": "Bar", "scale": {"paddingInner": 0}}}, "height": 25, "selection": {"selector046": {"type": "single", "encodings": ["x"]}}, "transform": [{"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector044"}}, {"aggregate": [{"op": "count", "as": "num_par"}], "groupby": ["Partido", "Bar"]}], "width": 400}, {"mark": {"type": "text", "baseline": "middle", "size": 8}, "encoding": {"color": {"condition": {"value": "black", "test": "(datum.num_par > 10000)"}, "value": "white"}, "text": {"type": "quantitative", "field": "num_par"}, "x": {"type": "ordinal", "field": "Partido", "scale": {"paddingInner": 0}}, "y": {"type": "ordinal", "axis": null, "field": "Bar", "scale": {"paddingInner": 0}}}, "transform": [{"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector044"}}, {"aggregate": [{"op": "count", "as": "num_par"}], "groupby": ["Partido", "Bar"]}]}], "data": {"url": "data/topicos.json"}}]}, {"hconcat": [{"mark": {"type": "area", "interpolate": "monotone"}, "encoding": {"color": {"type": "nominal", "field": "Dominant_Topic", "legend": null, "scale": {"scheme": "dark2"}}, "opacity": {"condition": {"value": 1, "selection": "selector043"}, "value": 0.2}, "tooltip": [{"type": "nominal", "field": "Dominant_Topic", "title": "T\u00f3pico"}], "x": {"type": "temporal", "axis": {"title": null}, "field": "Data", "scale": {"domain": {"selection": "selector044"}}, "timeUnit": "yearmonth"}, "y": {"type": "quantitative", "aggregate": "sum", "axis": {"title": null}, "field": "Word_Count", "stack": "zero"}}, "height": 200, "selection": {"selector043": {"type": "multi", "fields": ["Dominant_Topic"], "bind": "legend"}}, "transform": [{"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector045"}}, {"filter": {"selection": "selector042"}}], "width": 400}, {"mark": {"type": "area", "interpolate": "monotone"}, "encoding": {"color": {"type": "nominal", "field": "Dominant_Topic", "legend": null, "scale": {"scheme": "dark2"}}, "opacity": {"condition": {"value": 1, "selection": "selector043"}, "value": 0.2}, "tooltip": [{"type": "nominal", "field": "Dominant_Topic", "title": "T\u00f3pico"}], "x": {"type": "temporal", "axis": {"title": null}, "field": "Data", "scale": {"domain": {"selection": "selector044"}}, "timeUnit": "yearmonth"}, "y": {"type": "quantitative", "aggregate": "sum", "axis": null, "field": "Word_Count", "stack": "zero"}}, "height": 200, "selection": {"selector043": {"type": "multi", "fields": ["Dominant_Topic"], "bind": "legend"}}, "transform": [{"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector046"}}, {"filter": {"selection": "selector042"}}], "width": 400}], "data": {"url": "data/topicos.json"}, "resolve": {"scale": {"y": "shared"}}}, {"hconcat": [{"data": {"url": "data/topicos.json"}, "mark": {"type": "text", "align": "left", "baseline": "top", "dx": -245, "dy": -95, "fontSize": 10, "lineBreak": "<lbr>"}, "encoding": {"text": {"type": "nominal", "field": "Textbr"}, "x": {"type": "temporal", "axis": null, "field": "Data", "timeUnit": "yearmonth"}, "y": {"type": "nominal", "axis": null, "field": "Textbr"}}, "height": 200, "transform": [{"filter": {"selection": "selector045"}}, {"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector044"}}, {"sample": 1}], "width": 400}, {"data": {"url": "data/topicos.json"}, "mark": {"type": "text", "align": "left", "baseline": "top", "dx": -245, "dy": -95, "fontSize": 10, "lineBreak": "<lbr>"}, "encoding": {"text": {"type": "nominal", "field": "Textbr"}, "x": {"type": "temporal", "axis": null, "field": "Data", "timeUnit": "yearmonth"}, "y": {"type": "nominal", "axis": null, "field": "Textbr"}}, "height": 200, "transform": [{"filter": {"selection": "selector046"}}, {"filter": {"selection": "selector042"}}, {"filter": {"selection": "selector044"}}, {"sample": 1}], "width": 400}]}], "$schema": "https://vega.github.io/schema/vega-lite/v4.8.1.json"};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+    </div>
+
+  </div>
+
+
+
+
+
+  <!-- Pagination -->
+
+
+
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>
